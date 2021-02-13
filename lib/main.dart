@@ -26,6 +26,12 @@ class MyHomePage extends StatelessWidget {
       value: 211.35,
       date: DateTime.now(),
     ),
+    Transaction(
+      id: 3,
+      title: 'Cobrança do Agiota',
+      value: 677.87,
+      date: DateTime.now(),
+    ),
   ];
 
   @override
