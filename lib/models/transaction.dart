@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Transaction {
-  final int id;
+  final double id;
   final String title;
   final double value;
   final DateTime date;
