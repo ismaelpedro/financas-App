@@ -11,6 +11,11 @@ class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amber,
+        fontFamily: 'Quicksand',
+      ),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
@@ -23,25 +28,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _transactions = [
-    Transaction(
-      id: 1,
-      title: 'Novo Tênis de Corrida',
-      value: 310.67,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 2,
-      title: 'Conta de Luz',
-      value: 211.35,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 3,
-      title: 'Novo Tênis de Corrida',
-      value: 310.67,
-      date: DateTime.now(),
-    ),
+  final List<Transaction> _transactions = [
+    // Transaction(
+    //   id: 1,
+    //   title: 'Novo Tênis de Corrida',
+    //   value: 310.67,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 2,
+    //   title: 'Conta de Luz',
+    //   value: 211.35,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 3,
+    //   title: 'Novo Tênis de Corrida',
+    //   value: 310.67,
+    //   date: DateTime.now(),
+    // ),
   ];
 
   _addTransaction(String title, double value) {
@@ -71,7 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Finanças'),
+        title: Text(
+          'Despesas Pessoais',
+          style: TextStyle(
+            fontFamily: 'OpenSans-Bold',
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.purple,
         actions: [
