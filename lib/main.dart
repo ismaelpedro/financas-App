@@ -29,26 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    Transaction(
-      id: 1,
-      title: 'Novo Tênis de Corrida',
-      value: 310.67,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 2,
-      title: 'Conta de Luz',
-      value: 211.35,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 3,
-      title: 'Novo Tênis de Corrida',
-      value: 310.67,
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
@@ -58,12 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
@@ -71,6 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     Navigator.of(context).pop();
+  }
+
+  _deleteTransaction(double id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
   }
 
   _openTransactionForm(BuildContext context) {
@@ -105,12 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_transactions),
+            TransactionList(_transactions, _deleteTransaction),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         onPressed: () => _openTransactionForm(context),
         backgroundColor: Colors.purple,
       ),
