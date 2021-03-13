@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:expenses/components/transaction_form.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -7,7 +9,7 @@ import 'components/transaction_list.dart';
 import 'components/chart.dart';
 import 'models/transaction.dart';
 
-main() => runApp(ExpensesApp());
+void main() => runApp(ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
   @override
@@ -31,7 +33,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
-  bool _showChart = true;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
@@ -74,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]);
+
     final appBar = AppBar(
       title: Text(
         'Despesas Pessoais',
@@ -91,54 +93,46 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    final availableHeigth = MediaQuery.of(context).size.height -
+    final availableHeight = MediaQuery.of(context).size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Mostrar gráfico'),
-                Switch(
-                  value: _showChart,
-                  onChanged: (value) {
-                    setState(() {
-                      _showChart = value;
-                    });
-                  },
-                ),
-              ],
+    final bodyPage = SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(
+            height: availableHeight * 0.30,
+            child: Chart(_recentTransactions),
+          ),
+          Container(
+            height: availableHeight * 0.70,
+            child: TransactionList(
+              _transactions,
+              _deleteTransaction,
             ),
-            _showChart
-                ? Container(
-                    height: availableHeigth * 0.30,
-                    child: Chart(_recentTransactions),
-                  )
-                : Container(
-                    height: availableHeigth * 0.70,
-                    child: TransactionList(
-                      _transactions,
-                      _deleteTransaction,
-                    ),
-                  ),
-          ],
-        ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        onPressed: () => _openTransactionForm(context),
-        backgroundColor: Colors.purple,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: bodyPage,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: bodyPage,
+            floatingActionButton: FloatingActionButton(
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () => _openTransactionForm(context),
+              backgroundColor: Colors.purple,
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
